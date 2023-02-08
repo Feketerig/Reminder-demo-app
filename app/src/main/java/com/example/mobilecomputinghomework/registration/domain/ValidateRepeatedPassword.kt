@@ -6,7 +6,7 @@ class ValidateRepeatedPassword {
         if(password != repeatedPassword) {
             return ValidationResult(
                 successful = false,
-                errorMessage = "A két jelszó nem egyezik meg"
+                errorMessage = "The passwords do not match"
             )
         }
         return ValidationResult(

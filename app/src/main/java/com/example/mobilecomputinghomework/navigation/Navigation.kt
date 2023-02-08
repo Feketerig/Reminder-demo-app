@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.mobilecomputinghomework.login.presentation.LoginScreen
 import com.example.mobilecomputinghomework.profile.presentation.ProfileScreen
-import com.example.mobilecomputinghomework.registration.RegistrationScreen
+import com.example.mobilecomputinghomework.registration.presentation.RegistrationScreen
 import com.example.mobilecomputinghomework.reminderlist.presentation.RemindersListScreen
 
 @Composable

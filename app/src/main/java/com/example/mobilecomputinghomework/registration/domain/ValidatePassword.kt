@@ -6,7 +6,7 @@ class ValidatePassword {
         if (password.length < 8) {
             return ValidationResult(
                 successful = false,
-                errorMessage = "A jelszónak legalább 8 karakter hosszúnak kell lennie"
+                errorMessage = "The password must be at least 8 digits long"
             )
         }
         val containsLettersAndDigits = password.any { it.isDigit() } &&
@@ -14,7 +14,7 @@ class ValidatePassword {
         if (!containsLettersAndDigits) {
             return ValidationResult(
                 successful = false,
-                errorMessage = "A jeszónak tartalmaznia kell legalább egy betűt és legalább egy számot"
+                errorMessage = "The password must contain at least one number and one letter"
             )
         }
         return ValidationResult(

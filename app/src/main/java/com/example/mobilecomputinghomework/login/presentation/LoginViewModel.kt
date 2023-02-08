@@ -101,19 +101,19 @@ class LoginViewModel @Inject constructor(
                 state = state.copy(isError = true)
                 validationEventChannel.send(LoginScreenEvent.LoginFailed)
             }*/
-            //if(state.email == "levente.fazekas@gmail.com" && state.password == "1234567A"){
+            if(state.email == "levente.fazekas@gmail.com" && state.password == "1234567A"){
                 MainActivity.loggedIn = true
                 validationEventChannel.send(LoginScreenEvent.LoginSuccess)
-//            with(sharedPreferences.edit()){
-//                putString("email", state.email)
-//                putString("password", state.password)
-//                apply()
-//            }
-//            }else{
-//            state = state.copy(isError = true)
-//                MainActivity.loggedIn = false
-//                validationEventChannel.send(LoginScreenEvent.LoginFailed)
-//            }
+            with(sharedPreferences.edit()){
+                putString("email", state.email)
+                putString("password", state.password)
+                apply()
+            }
+            }else{
+            state = state.copy(isError = true)
+                MainActivity.loggedIn = false
+                validationEventChannel.send(LoginScreenEvent.LoginFailed)
+            }
             state = state.copy(isLoading = false)
         }
     }

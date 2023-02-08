@@ -1,4 +1,4 @@
-package com.example.mobilecomputinghomework.registration
+package com.example.mobilecomputinghomework.registration.presentation
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -19,7 +19,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.mobilecomputinghomework.navigation.Screen
 import com.example.mobilecomputinghomework.registration.domain.RegistrationEvent
-import com.example.mobilecomputinghomework.registration.presentation.RegistrationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,7 +37,7 @@ fun RegistrationScreen(
                         "Registration successful",
                         Toast.LENGTH_LONG
                     ).show()
-                    navController.navigate(Screen.RemindersList.route)
+                    navController.navigate(Screen.Login.route)
                 }
                 is RegistrationViewModel.RegistrationValidationEvent.Failed -> {
                     Toast.makeText(
