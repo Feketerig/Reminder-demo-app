@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import com.example.mobilecomputinghomework.MainActivity
 import com.example.mobilecomputinghomework.feature_reminder.domain.Reminder
 import com.example.mobilecomputinghomework.navigation.Screen
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,6 +28,8 @@ fun RemindersListScreen(
     var showDeleteAlert by remember { mutableStateOf<Reminder?>(null) }
 
     val scope = rememberCoroutineScope()
+
+    val snackbarHostState = remember { SnackbarHostState() }
 
     val reminders by viewModel.reminders.collectAsState(initial = emptyList())
 
@@ -79,6 +82,7 @@ fun RemindersListScreen(
                 }
             )
         },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { paddingValues ->
         if (showDeleteAlert != null) {
             DeleteAlert(
@@ -86,15 +90,15 @@ fun RemindersListScreen(
                 onDelete = {
                     viewModel.deleteReminder(showDeleteAlert ?: return@DeleteAlert)
                     showDeleteAlert = null
-                    /*scope.launch {
-                        val result = scaffoldState.snackbarHostState.showSnackbar(
-                            message = "Note deleted",
+                    scope.launch {
+                        val result = snackbarHostState.showSnackbar(
+                            message = "Reminder deleted",
                             actionLabel = "Undo"
                         )
                         if(result == SnackbarResult.ActionPerformed) {
                             viewModel.restoreReminder()
                         }
-                    }*/
+                    }
                 }
             )
         }
@@ -104,7 +108,7 @@ fun RemindersListScreen(
                     message = reminder.message,
                     deadline = reminder.reminder_time,
                     onClick = {
-
+                        navHostController.navigate(Screen.RemindersList.route)
                     },
                     onDelete = {
                         showDeleteAlert = reminder
