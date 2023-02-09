@@ -17,22 +17,37 @@ fun RemindersListScreen(
 ) {
     var showDeleteAlert by remember { mutableStateOf<Reminder?>(null) }
 
+    val scope = rememberCoroutineScope()
+
+    val reminders by viewModel.reminders.collectAsState(initial = emptyList())
+
     if (showDeleteAlert != null){
         DeleteAlert(
             onCancel = { showDeleteAlert = null },
             onDelete = {
-                viewModel.list.remove(showDeleteAlert)
+                viewModel.deleteReminder(showDeleteAlert ?: return@DeleteAlert)
                 showDeleteAlert = null
+                /*scope.launch {
+                    val result = scaffoldState.snackbarHostState.showSnackbar(
+                        message = "Note deleted",
+                        actionLabel = "Undo"
+                    )
+                    if(result == SnackbarResult.ActionPerformed) {
+                        viewModel.restoreReminder()
+                    }
+                }*/
             }
         )
     }
     LazyColumn(modifier = Modifier.fillMaxSize()){
-        items(viewModel.list){ reminder ->
+        items(reminders){ reminder ->
             Reminder(
                 message = reminder.message,
                 deadline = reminder.reminder_time,
-                {},
-                {
+                onClick = {
+
+                },
+                onDelete = {
                     showDeleteAlert = reminder
                 }
             )
