@@ -1,4 +1,4 @@
-package com.example.mobilecomputinghomework.registration.presentation
+package com.example.mobilecomputinghomework.feature_authentication.presentation.registration.presentation
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -18,7 +18,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.mobilecomputinghomework.navigation.Screen
-import com.example.mobilecomputinghomework.registration.domain.RegistrationEvent
+import com.example.mobilecomputinghomework.feature_authentication.presentation.registration.RegistrationEvent
+import com.example.mobilecomputinghomework.feature_authentication.presentation.registration.RegistrationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

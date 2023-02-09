@@ -1,4 +1,4 @@
-package com.example.mobilecomputinghomework.login.data
+package com.example.mobilecomputinghomework.feature_authentication.presentation.login
 
 data class LoginState(
     val email: String = "",

@@ -1,4 +1,4 @@
-package com.example.mobilecomputinghomework.registration.domain
+package com.example.mobilecomputinghomework.feature_authentication.domain
 
 data class ValidationResult(
     val successful: Boolean,

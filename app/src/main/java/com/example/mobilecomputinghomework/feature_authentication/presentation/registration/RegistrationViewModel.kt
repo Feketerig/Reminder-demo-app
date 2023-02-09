@@ -1,16 +1,14 @@
-package com.example.mobilecomputinghomework.registration.presentation
+package com.example.mobilecomputinghomework.feature_authentication.presentation.registration
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mobilecomputinghomework.registration.domain.RegistrationEvent
-import com.example.mobilecomputinghomework.registration.data.RegistrationState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import com.example.mobilecomputinghomework.registration.domain.ValidateEmail
-import com.example.mobilecomputinghomework.registration.domain.ValidatePassword
-import com.example.mobilecomputinghomework.registration.domain.ValidateRepeatedPassword
+import com.example.mobilecomputinghomework.feature_authentication.domain.ValidateEmail
+import com.example.mobilecomputinghomework.feature_authentication.domain.ValidatePassword
+import com.example.mobilecomputinghomework.feature_authentication.domain.ValidateRepeatedPassword
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch

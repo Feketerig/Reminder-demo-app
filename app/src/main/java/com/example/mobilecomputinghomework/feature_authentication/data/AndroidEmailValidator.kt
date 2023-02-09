@@ -1,7 +1,7 @@
-package com.example.mobilecomputinghomework.registration.data
+package com.example.mobilecomputinghomework.feature_authentication.data
 
 import android.util.Patterns
-import com.example.mobilecomputinghomework.registration.domain.EmailPatternValidator
+import com.example.mobilecomputinghomework.feature_authentication.domain.EmailPatternValidator
 
 class AndroidEmailValidator: EmailPatternValidator {
     override fun isValidEmail(email: String): Boolean {

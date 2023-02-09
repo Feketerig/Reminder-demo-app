@@ -1,4 +1,4 @@
-package com.example.mobilecomputinghomework.login.presentation
+package com.example.mobilecomputinghomework.feature_authentication.presentation.login
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.mobilecomputinghomework.login.domain.LoginEvent
 import com.example.mobilecomputinghomework.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)

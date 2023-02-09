@@ -1,4 +1,4 @@
-package com.example.mobilecomputinghomework.login.domain
+package com.example.mobilecomputinghomework.feature_authentication.presentation.login
 
 sealed class LoginEvent{
     data class EmailChanged(val email: String) : LoginEvent()

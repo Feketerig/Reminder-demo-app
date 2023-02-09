@@ -1,4 +1,4 @@
-package com.example.mobilecomputinghomework.login.presentation
+package com.example.mobilecomputinghomework.feature_authentication.presentation.login
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -10,8 +10,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import com.example.mobilecomputinghomework.MainActivity
-import com.example.mobilecomputinghomework.login.data.LoginState
-import com.example.mobilecomputinghomework.login.domain.LoginEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers

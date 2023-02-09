@@ -1,4 +1,4 @@
-package com.example.mobilecomputinghomework.registration.data
+package com.example.mobilecomputinghomework.feature_authentication.presentation.registration
 
 data class RegistrationState(
     val email: String = "",
