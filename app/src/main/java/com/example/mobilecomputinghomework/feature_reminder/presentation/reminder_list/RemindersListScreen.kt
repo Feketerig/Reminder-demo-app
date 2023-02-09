@@ -16,6 +16,7 @@ import com.example.mobilecomputinghomework.MainActivity
 import com.example.mobilecomputinghomework.feature_reminder.domain.Reminder
 import com.example.mobilecomputinghomework.navigation.Screen
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Instant
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,7 +36,7 @@ fun RemindersListScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { }) {
+            FloatingActionButton(onClick = { navHostController.navigate(Screen.ReminderEdit.route) }) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = "Add new reminder",
@@ -106,9 +107,9 @@ fun RemindersListScreen(
             items(reminders) { reminder ->
                 Reminder(
                     message = reminder.message,
-                    deadline = reminder.reminder_time,
+                    deadline = reminder.reminder_time ?: Instant.fromEpochSeconds(1000000000),
                     onClick = {
-                        navHostController.navigate(Screen.RemindersList.route)
+                        navHostController.navigate(Screen.ReminderEdit.route + "?id=${reminder.id}")
                     },
                     onDelete = {
                         showDeleteAlert = reminder

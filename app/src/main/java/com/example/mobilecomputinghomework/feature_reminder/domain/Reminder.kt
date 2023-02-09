@@ -1,14 +1,15 @@
 package com.example.mobilecomputinghomework.feature_reminder.domain
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
 data class Reminder(
-    val id: Long,
-    val message: String,
-    val location_x: Double,
-    val location_y: Double,
-    val reminder_time: Instant,
-    val creation_time: Instant,
-    val creator_id: Long,
-    val reminder_seen: Boolean
+    val id: Long? = null,
+    val message: String = "",
+    val location_x: Double? = null,
+    val location_y: Double? = null,
+    val reminder_time: Instant? = null,
+    val creation_time: Instant = Clock.System.now(),
+    val creator_id: Long = 1L,
+    val reminder_seen: Boolean = false
 )

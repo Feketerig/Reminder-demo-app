@@ -2,17 +2,17 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b03d1b421329f7b03f3c8b5ed92f2999",
+    "identityHash": "d3c6efc1e1bb1574c0b8a518c353e604",
     "entities": [
       {
         "tableName": "reminders",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `message` TEXT NOT NULL, `location_x` REAL NOT NULL, `location_y` REAL NOT NULL, `reminder_time` INTEGER NOT NULL, `creation_time` INTEGER NOT NULL, `creator_id` INTEGER NOT NULL, `reminder_seen` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `message` TEXT NOT NULL, `location_x` REAL, `location_y` REAL, `reminder_time` INTEGER, `creation_time` INTEGER NOT NULL, `creator_id` INTEGER NOT NULL, `reminder_seen` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "message",
@@ -24,19 +24,19 @@
             "fieldPath": "location_x",
             "columnName": "location_x",
             "affinity": "REAL",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "location_y",
             "columnName": "location_y",
             "affinity": "REAL",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "reminder_time",
             "columnName": "reminder_time",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "creation_time",
@@ -70,7 +70,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b03d1b421329f7b03f3c8b5ed92f2999')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd3c6efc1e1bb1574c0b8a518c353e604')"
     ]
   }
 }
