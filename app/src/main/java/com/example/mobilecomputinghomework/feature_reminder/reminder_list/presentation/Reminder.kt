@@ -1,4 +1,4 @@
-package com.example.mobilecomputinghomework.reminderlist.presentation
+package com.example.mobilecomputinghomework.feature_reminder.reminder_list.presentation
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,14 +16,15 @@ import kotlinx.datetime.toLocalDateTime
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Reminder(
-    title: String,
+    message: String,
     deadline: Instant,
-    onclick: () -> Unit,
+    onClick: () -> Unit,
+    onDelete: () -> Unit
 ) {
     ElevatedCard(
         modifier = Modifier.padding(10.dp),
         shape = RoundedCornerShape(20.dp),
-        onClick = onclick
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -31,21 +32,23 @@ fun Reminder(
         ) {
             Column(modifier = Modifier.padding(8.dp)) {
                 Text(
-                    text = title,
+                    text = message,
                     style = MaterialTheme.typography.headlineLarge,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Deadline: ${deadline.toLocalDateTime(TimeZone.currentSystemDefault()).date}",
+                    text = "${deadline.toLocalDateTime(TimeZone.currentSystemDefault()).date}",
                     style = MaterialTheme.typography.bodySmall,
                 )
             }
             IconButton(
-                onClick = { /*TODO*/ }
+                onClick = { onDelete() },
+                modifier = Modifier.size(75.dp)
             ) {
                 Icon(
                     Icons.Default.Delete,
                     "",
+                    modifier = Modifier.size(50.dp)
                 )
             }
         }
@@ -56,8 +59,9 @@ fun Reminder(
 @Composable
 fun ReminderPreview() {
     Reminder(
-        title = "First",
+        message = "First",
         deadline = Instant.fromEpochSeconds(1),
-        onclick = {}
+        onClick = {},
+        onDelete = {}
     )
 }
