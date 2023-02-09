@@ -1,4 +1,4 @@
-package com.example.mobilecomputinghomework.core.data
+package com.example.mobilecomputinghomework.feature_reminder.data
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

@@ -1,4 +1,4 @@
-package com.example.mobilecomputinghomework.core.domain
+package com.example.mobilecomputinghomework.feature_reminder.domain
 
 import kotlinx.datetime.Instant
 

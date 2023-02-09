@@ -1,4 +1,4 @@
-package com.example.mobilecomputinghomework.feature_reminder.reminder_list.presentation
+package com.example.mobilecomputinghomework.feature_reminder.presentation.reminder_list
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,7 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.mobilecomputinghomework.core.domain.Reminder
+import com.example.mobilecomputinghomework.feature_reminder.domain.Reminder
 
 @Composable
 fun RemindersListScreen(

@@ -1,24 +1,17 @@
-package com.example.mobilecomputinghomework.core.data
+package com.example.mobilecomputinghomework.feature_reminder.domain
 
-import androidx.room.*
+import com.example.mobilecomputinghomework.feature_reminder.data.ReminderEntity
 import kotlinx.coroutines.flow.Flow
 
-@Dao
-interface ReminderDao {
+interface ReminderRepository {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertReminder(reminderEntity: ReminderEntity)
 
-    @Query("select * from reminders where id = :id")
     suspend fun getReminderById(id: Long): ReminderEntity
 
-    @Query("select * from reminders")
     fun getReminders(): Flow<List<ReminderEntity>>
 
-    @Delete
     suspend fun deleteReminder(reminderEntity: ReminderEntity)
 
-    @Query("delete from reminders")
     suspend fun clearReminders()
-
 }

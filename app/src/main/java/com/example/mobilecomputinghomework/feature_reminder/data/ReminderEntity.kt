@@ -1,4 +1,4 @@
-package com.example.mobilecomputinghomework.core.data
+package com.example.mobilecomputinghomework.feature_reminder.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

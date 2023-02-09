@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import com.example.mobilecomputinghomework.feature_authentication.presentation.login.LoginScreen
 import com.example.mobilecomputinghomework.profile.presentation.ProfileScreen
 import com.example.mobilecomputinghomework.feature_authentication.presentation.registration.presentation.RegistrationScreen
-import com.example.mobilecomputinghomework.feature_reminder.reminder_list.presentation.RemindersListScreen
+import com.example.mobilecomputinghomework.feature_reminder.presentation.reminder_list.RemindersListScreen
 
 @Composable
 fun Navigation(

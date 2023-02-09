@@ -2,8 +2,8 @@ package com.example.mobilecomputinghomework.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.mobilecomputinghomework.core.data.ReminderDao
-import com.example.mobilecomputinghomework.core.data.ReminderDatabase
+import com.example.mobilecomputinghomework.feature_reminder.data.ReminderDao
+import com.example.mobilecomputinghomework.feature_reminder.data.ReminderDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

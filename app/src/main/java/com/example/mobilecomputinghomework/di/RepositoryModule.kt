@@ -1,8 +1,8 @@
 package com.example.mobilecomputinghomework.di
 
-import com.example.mobilecomputinghomework.core.data.ReminderDao
-import com.example.mobilecomputinghomework.core.data.ReminderRepositoryImpl
-import com.example.mobilecomputinghomework.core.domain.ReminderRepository
+import com.example.mobilecomputinghomework.feature_reminder.data.ReminderDao
+import com.example.mobilecomputinghomework.feature_reminder.data.ReminderRepositoryImpl
+import com.example.mobilecomputinghomework.feature_reminder.domain.ReminderRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

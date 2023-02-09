@@ -1,4 +1,4 @@
-package com.example.mobilecomputinghomework.feature_reminder.reminder_list.presentation
+package com.example.mobilecomputinghomework.feature_reminder.presentation.reminder_list
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape

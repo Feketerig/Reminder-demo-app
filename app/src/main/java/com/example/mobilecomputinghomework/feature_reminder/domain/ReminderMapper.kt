@@ -1,6 +1,6 @@
-package com.example.mobilecomputinghomework.core.domain
+package com.example.mobilecomputinghomework.feature_reminder.domain
 
-import com.example.mobilecomputinghomework.core.data.ReminderEntity
+import com.example.mobilecomputinghomework.feature_reminder.data.ReminderEntity
 import kotlinx.datetime.Instant
 
 fun ReminderEntity.toDomain(): Reminder = Reminder(

@@ -1,6 +1,6 @@
-package com.example.mobilecomputinghomework.core.data
+package com.example.mobilecomputinghomework.feature_reminder.data
 
-import com.example.mobilecomputinghomework.core.domain.ReminderRepository
+import com.example.mobilecomputinghomework.feature_reminder.domain.ReminderRepository
 import kotlinx.coroutines.flow.Flow
 
 class ReminderRepositoryImpl(
