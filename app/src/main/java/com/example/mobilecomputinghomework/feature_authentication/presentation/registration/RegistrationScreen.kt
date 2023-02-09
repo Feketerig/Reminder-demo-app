@@ -17,9 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.mobilecomputinghomework.navigation.Screen
 import com.example.mobilecomputinghomework.feature_authentication.presentation.registration.RegistrationEvent
 import com.example.mobilecomputinghomework.feature_authentication.presentation.registration.RegistrationViewModel
+import com.example.mobilecomputinghomework.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,10 +54,10 @@ fun RegistrationScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(32.dp)
     ) {
         Text(
-            text = "Please fill in your information",
+            text = "Please fill in your information to register",
             fontSize = 26.sp,
             fontWeight = FontWeight.Bold
         )
