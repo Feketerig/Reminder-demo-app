@@ -1,4 +1,4 @@
-package com.example.mobilecomputinghomework.profile.presentation
+package com.example.mobilecomputinghomework.feature_profile.presentation
 
 import android.net.Uri
 import android.util.Log
