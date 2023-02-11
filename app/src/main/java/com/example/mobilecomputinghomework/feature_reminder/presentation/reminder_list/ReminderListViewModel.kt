@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mobilecomputinghomework.feature_reminder.domain.Reminder
 import com.example.mobilecomputinghomework.feature_reminder.domain.ReminderRepository
-import com.example.mobilecomputinghomework.feature_reminder.domain.toDomain
-import com.example.mobilecomputinghomework.feature_reminder.domain.toEntity
+import com.example.mobilecomputinghomework.feature_reminder.data.toDomain
+import com.example.mobilecomputinghomework.feature_reminder.data.toEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map

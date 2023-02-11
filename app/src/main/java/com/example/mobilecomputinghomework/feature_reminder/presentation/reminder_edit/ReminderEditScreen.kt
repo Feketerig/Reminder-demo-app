@@ -1,14 +1,25 @@
 package com.example.mobilecomputinghomework.feature_reminder.presentation.reminder_edit
 
+import android.net.Uri
+import android.text.format.DateFormat
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
+import kotlinx.datetime.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -16,10 +27,19 @@ fun ReminderEditScreen(
     navHostController: NavHostController,
     viewModel: ReminderEditViewModel = hiltViewModel()
 ) {
+    var showDatePicker by remember { mutableStateOf(false) }
+    var showTimePicker by remember { mutableStateOf(false) }
+    var date by remember {
+        mutableStateOf(0L)
+    }
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = viewModel::onSave ) {
+            FloatingActionButton(
+                onClick = {
+                    viewModel.onSave()
+                    navHostController.navigateUp()
+            } ) {
                 Icon(
                     imageVector = Icons.Default.Done,
                     contentDescription = "Save reminder",
@@ -27,17 +47,131 @@ fun ReminderEditScreen(
                 )
             }
         },
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    if (viewModel.currentReminder.id != null){
+                        Text(text = "Edit reminder")
+                    }else{
+                        Text(text = "Create reminder")
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                ),
+            )
+        },
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .padding(16.dp)
         ) {
+            Text(text = "Reminder message: ")
             TextField(
                 value = viewModel.currentReminder.message,
-                onValueChange = { viewModel.currentReminder = viewModel.currentReminder.copy(message = it)}
+                onValueChange = { viewModel.currentReminder = viewModel.currentReminder.copy(message = it)},
+                placeholder = {
+                    Text(text = "Message")
+                }
             )
+            Spacer(modifier = Modifier.height(16.dp))
+            Row() {
+                Text(text = "Selected alert time: ")
+                viewModel.currentReminder.reminder_time?.let {time ->
+                    val localDateTime = time.toLocalDateTime(TimeZone.currentSystemDefault())
+                    val formattedLocalDateTime = localDateTime.toString().replace("T", " ")
+                    Text(text = formattedLocalDateTime)
+                }
+            }
             Spacer(modifier = Modifier.height(8.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Button(onClick = { showDatePicker = true }) {
+                    Text(text = "Pick date and time")
+                }
+                if (viewModel.currentReminder.reminder_time != null) {
+                    IconButton(onClick = {
+                        viewModel.currentReminder =
+                            viewModel.currentReminder.copy(reminder_time = null)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete image",
+                            modifier = Modifier.size(50.dp)
+                        )
+                    }
+                }
+            }
+
+            if (showDatePicker) {
+                val datePickerState = rememberDatePickerState()
+                val confirmEnabled by remember{ derivedStateOf { datePickerState.selectedDateMillis != null }}
+                DatePickerDialog(
+                    onDismissRequest = {
+                        showDatePicker = false
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                showDatePicker = false
+                                date = datePickerState.selectedDateMillis!!
+                                showTimePicker = true
+                            },
+                            enabled = confirmEnabled
+                        ) {
+                            Text("OK")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = {
+                                showDatePicker = false
+                            }
+                        ) {
+                            Text("Cancel")
+                        }
+                    }
+                ) {
+                    DatePicker(state = datePickerState)
+                }
+            }
+            if (showTimePicker) {
+                val context = LocalContext.current
+                val is24HourFormat by rememberUpdatedState(DateFormat.is24HourFormat(context))
+                val state = rememberTimePickerState(is24Hour = is24HourFormat)
+                AlertDialog(
+                    onDismissRequest = {
+                        showTimePicker = false
+                    },
+                    title = {
+                        Text(text = "Choose time!")
+                    },
+                    text = {
+                        TimePicker(state = state)
+                    },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                viewModel.setReminderTime(date, state.hour, state.minute)
+                                showTimePicker = false
+                            }) {
+                            Text("OK")
+                        }
+                    },
+                    dismissButton = {
+                        Button(
+                            onClick = {
+                                showTimePicker = false
+                            }) {
+                            Text("Cancel")
+                        }
+                    }
+                )
+            }
+
+
         }
     }
 }
