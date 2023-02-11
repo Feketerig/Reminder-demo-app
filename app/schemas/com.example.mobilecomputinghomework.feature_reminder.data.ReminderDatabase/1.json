@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "d3c6efc1e1bb1574c0b8a518c353e604",
+    "identityHash": "1a612663cd29b20261a3b113ccb0cb38",
     "entities": [
       {
         "tableName": "reminders",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `message` TEXT NOT NULL, `location_x` REAL, `location_y` REAL, `reminder_time` INTEGER, `creation_time` INTEGER NOT NULL, `creator_id` INTEGER NOT NULL, `reminder_seen` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `message` TEXT NOT NULL, `location_x` REAL, `location_y` REAL, `reminder_time` INTEGER, `creation_time` INTEGER NOT NULL, `creator_id` INTEGER NOT NULL, `reminder_seen` INTEGER NOT NULL, `imagePath` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -55,6 +55,12 @@
             "columnName": "reminder_seen",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "imagePath",
+            "columnName": "imagePath",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -70,7 +76,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd3c6efc1e1bb1574c0b8a518c353e604')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1a612663cd29b20261a3b113ccb0cb38')"
     ]
   }
 }

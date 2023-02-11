@@ -1,5 +1,6 @@
 package com.example.mobilecomputinghomework.feature_profile.presentation
 
+import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,9 +34,14 @@ fun ProfileScreen(
     var selectedImageUri by remember {
         mutableStateOf<Uri?>(null)
     }
+    val context = LocalContext.current
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = { uri -> selectedImageUri = uri }
+        onResult = { uri ->
+            val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            context.contentResolver.takePersistableUriPermission(uri!!, flag)
+            selectedImageUri = uri
+        }
     )
     Column(
         modifier = Modifier.fillMaxSize(),

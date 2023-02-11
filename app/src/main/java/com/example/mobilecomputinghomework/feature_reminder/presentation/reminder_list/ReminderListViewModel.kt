@@ -2,10 +2,10 @@ package com.example.mobilecomputinghomework.feature_reminder.presentation.remind
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mobilecomputinghomework.feature_reminder.domain.Reminder
-import com.example.mobilecomputinghomework.feature_reminder.domain.ReminderRepository
 import com.example.mobilecomputinghomework.feature_reminder.data.toDomain
 import com.example.mobilecomputinghomework.feature_reminder.data.toEntity
+import com.example.mobilecomputinghomework.feature_reminder.domain.Reminder
+import com.example.mobilecomputinghomework.feature_reminder.domain.ReminderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -22,24 +22,6 @@ class ReminderListViewModel @Inject constructor(
     private var recentlyDeletedReminder: Reminder? = null
 
     init {
-        //Example data
-        /*viewModelScope.launch {
-            val list = (0..20).map { index ->
-                Reminder(
-                    id = index.toLong(),
-                    message = index.toString(),
-                    location_x = 0.0,
-                    location_y = 0.0,
-                    reminder_time = Instant.fromEpochSeconds(index.toLong()),
-                    creation_time = Instant.fromEpochSeconds(index.toLong()),
-                    creator_id = index.toLong(),
-                    reminder_seen = false
-                )
-            }.forEach { reminder ->
-                reminderRepository.insertReminder(reminder.toEntity())
-            }
-        }*/
-
         reminders = reminderRepository.getReminders().map { reminderEntityList ->
             reminderEntityList.map { reminderEntity ->
                 reminderEntity.toDomain()

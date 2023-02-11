@@ -16,7 +16,6 @@ import com.example.mobilecomputinghomework.MainActivity
 import com.example.mobilecomputinghomework.feature_reminder.domain.Reminder
 import com.example.mobilecomputinghomework.navigation.Screen
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Instant
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -105,9 +104,10 @@ fun RemindersListScreen(
         }
         LazyColumn(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
             items(reminders) { reminder ->
-                Reminder(
+                ReminderComponent(
                     message = reminder.message,
-                    deadline = reminder.reminder_time ?: Instant.fromEpochSeconds(1000000000),
+                    deadline = reminder.reminder_time,
+                    imagePath = reminder.imagePath,
                     onClick = {
                         navHostController.navigate(Screen.ReminderEdit.route + "?id=${reminder.id}")
                     },

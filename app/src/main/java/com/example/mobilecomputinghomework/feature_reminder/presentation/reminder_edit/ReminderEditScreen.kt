@@ -1,6 +1,6 @@
 package com.example.mobilecomputinghomework.feature_reminder.presentation.reminder_edit
 
-import android.net.Uri
+import android.content.Intent
 import android.text.format.DateFormat
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -32,13 +32,20 @@ fun ReminderEditScreen(
     var date by remember {
         mutableStateOf(0L)
     }
+    var messageIsEmptyError by remember {
+        mutableStateOf(false)
+    }
 
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    viewModel.onSave()
-                    navHostController.navigateUp()
+                    if (viewModel.currentReminder.message.isNotEmpty()) {
+                        viewModel.onSave()
+                        navHostController.navigateUp()
+                    }else{
+                        messageIsEmptyError = true
+                    }
             } ) {
                 Icon(
                     imageVector = Icons.Default.Done,
@@ -70,15 +77,28 @@ fun ReminderEditScreen(
                 .padding(16.dp)
         ) {
             Text(text = "Reminder message: ")
+            Spacer(modifier = Modifier.height(8.dp))
             TextField(
                 value = viewModel.currentReminder.message,
-                onValueChange = { viewModel.currentReminder = viewModel.currentReminder.copy(message = it)},
+                onValueChange = {
+                    messageIsEmptyError = false
+                    viewModel.currentReminder = viewModel.currentReminder.copy(message = it)
+                },
+                isError = messageIsEmptyError,
+                modifier = Modifier.fillMaxWidth(),
                 placeholder = {
                     Text(text = "Message")
                 }
             )
+            if (messageIsEmptyError){
+                Text(
+                    text = "Message can not be empty",
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.align(Alignment.End)
+                )
+            }
             Spacer(modifier = Modifier.height(16.dp))
-            Row() {
+            Row {
                 Text(text = "Selected alert time: ")
                 viewModel.currentReminder.reminder_time?.let {time ->
                     val localDateTime = time.toLocalDateTime(TimeZone.currentSystemDefault())
@@ -170,7 +190,46 @@ fun ReminderEditScreen(
                     }
                 )
             }
-
+            val context = LocalContext.current
+            val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.PickVisualMedia(),
+                onResult = { uri ->
+                    val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    context.contentResolver.takePersistableUriPermission(uri!!, flag)
+                    viewModel.currentReminder = viewModel.currentReminder.copy(imagePath = uri)
+                }
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = {
+                singlePhotoPickerLauncher.launch(
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                )
+            }) {
+                if (viewModel.currentReminder.imagePath == null) {
+                    Text(text = "Pick a photo")
+                }else{
+                    Text(text = "Change photo")
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            if (viewModel.currentReminder.imagePath != null){
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    AsyncImage(
+                        model = viewModel.currentReminder.imagePath,
+                        contentDescription = "Reminder picture",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.size(100.dp),
+                    )
+                    IconButton(onClick = { viewModel.currentReminder =
+                        viewModel.currentReminder.copy(imagePath = null) }) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete image",
+                            modifier = Modifier.size(50.dp)
+                        )
+                    }
+                }
+            }
 
         }
     }
