@@ -19,9 +19,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import kotlinx.datetime.*
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
 @Composable
 fun ReminderEditScreen(
     navHostController: NavHostController,
@@ -35,6 +38,7 @@ fun ReminderEditScreen(
     var messageIsEmptyError by remember {
         mutableStateOf(false)
     }
+    val context = LocalContext.current
 
     Scaffold(
         floatingActionButton = {
@@ -42,6 +46,19 @@ fun ReminderEditScreen(
                 onClick = {
                     if (viewModel.currentReminder.message.isNotEmpty()) {
                         viewModel.onSave()
+                        if (viewModel.currentReminder.id == null) {
+                            val startDate =
+                                viewModel.currentReminder.reminder_time?.toEpochMilliseconds()
+                            val endDate = viewModel.currentReminder.reminder_time?.plus(1.hours)
+                                ?.toEpochMilliseconds()
+                            val mIntent = Intent(Intent.ACTION_EDIT)
+                            mIntent.type = "vnd.android.cursor.item/event"
+                            mIntent.putExtra("beginTime", startDate)
+                            mIntent.putExtra("time", true)
+                            mIntent.putExtra("endTime", endDate)
+                            mIntent.putExtra("title", viewModel.currentReminder.message)
+                            context.startActivity(mIntent)
+                        }
                         navHostController.navigateUp()
                     }else{
                         messageIsEmptyError = true
@@ -118,7 +135,7 @@ fun ReminderEditScreen(
                     }) {
                         Icon(
                             imageVector = Icons.Default.Delete,
-                            contentDescription = "Delete image",
+                            contentDescription = "Delete time",
                             modifier = Modifier.size(50.dp)
                         )
                     }
@@ -158,7 +175,6 @@ fun ReminderEditScreen(
                 }
             }
             if (showTimePicker) {
-                val context = LocalContext.current
                 val is24HourFormat by rememberUpdatedState(DateFormat.is24HourFormat(context))
                 val state = rememberTimePickerState(is24Hour = is24HourFormat)
                 AlertDialog(
@@ -190,7 +206,6 @@ fun ReminderEditScreen(
                     }
                 )
             }
-            val context = LocalContext.current
             val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.PickVisualMedia(),
                 onResult = { uri ->

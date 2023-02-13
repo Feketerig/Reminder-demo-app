@@ -25,5 +25,5 @@ fun Reminder.toEntity(): ReminderEntity = ReminderEntity(
     creation_time = creation_time.epochSeconds,
     creator_id = creator_id,
     reminder_seen = reminder_seen,
-    imagePath = imagePath.toString()
+    imagePath = imagePath?.toString()
 )
