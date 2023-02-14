@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.datetime.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,13 +18,34 @@ class ReminderListViewModel @Inject constructor(
     private val reminderRepository: ReminderRepository
 ): ViewModel() {
 
-    var reminders = flowOf(emptyList<Reminder>())
+    var dueDateReminders = flowOf(emptyList<Reminder>())
+
+    var moreReminders = flowOf(emptyList<Reminder>())
 
     private var recentlyDeletedReminder: Reminder? = null
 
     init {
-        reminders = reminderRepository.getReminders().map { reminderEntityList ->
-            reminderEntityList.map { reminderEntity ->
+        dueDateReminders = reminderRepository.getReminders().map { reminderEntityList ->
+            reminderEntityList.filter { reminderEntity ->
+                reminderEntity.reminder_seen ||
+                        reminderEntity.reminder_time?.let {
+                            val date = Instant.fromEpochSeconds(it).toLocalDateTime(TimeZone.currentSystemDefault()).date
+                            val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
+                            date == today
+                        } ?: false
+            }.map { reminderEntity ->
+                reminderEntity.toDomain()
+            }
+        }
+        moreReminders = reminderRepository.getReminders().map { reminderEntityList ->
+            reminderEntityList.filterNot { reminderEntity ->
+                reminderEntity.reminder_seen ||
+                        reminderEntity.reminder_time?.let {
+                            val date = Instant.fromEpochSeconds(it).toLocalDateTime(TimeZone.currentSystemDefault()).date
+                            val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
+                            date == today
+                        } ?: false
+            }.map { reminderEntity ->
                 reminderEntity.toDomain()
             }
         }

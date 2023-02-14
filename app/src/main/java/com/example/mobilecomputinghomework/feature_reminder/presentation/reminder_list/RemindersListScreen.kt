@@ -1,15 +1,19 @@
 package com.example.mobilecomputinghomework.feature_reminder.presentation.reminder_list
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.mobilecomputinghomework.MainActivity
@@ -31,7 +35,13 @@ fun RemindersListScreen(
 
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val reminders by viewModel.reminders.collectAsState(initial = emptyList())
+    var showDueDateReminders by remember { mutableStateOf(true) }
+
+    var showMoreReminders by remember { mutableStateOf(false) }
+
+    val airedReminders by viewModel.dueDateReminders.collectAsState(initial = emptyList())
+
+    val notAiredReminders by viewModel.moreReminders.collectAsState(initial = emptyList())
 
     Scaffold(
         floatingActionButton = {
@@ -102,19 +112,127 @@ fun RemindersListScreen(
                 }
             )
         }
-        LazyColumn(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-            items(reminders) { reminder ->
-                ReminderComponent(
-                    message = reminder.message,
-                    deadline = reminder.reminder_time,
-                    imagePath = reminder.imagePath,
-                    onClick = {
-                        navHostController.navigate(Screen.ReminderEdit.route + "?id=${reminder.id}")
-                    },
-                    onDelete = {
-                        showDeleteAlert = reminder
+        LazyColumn(modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues))
+        {
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .clickable {
+                            showDueDateReminders = !showDueDateReminders
+                        },
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Due date",
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                    Spacer(modifier = Modifier.width(5.dp))
+                    if (showDueDateReminders) {
+                        Icon(
+                            imageVector = Icons.Default.KeyboardArrowDown,
+                            contentDescription = "show due date reminders",
+                            modifier = Modifier.size(30.dp)
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Default.KeyboardArrowUp,
+                            contentDescription = "hide due date reminders",
+                            modifier = Modifier.size(30.dp)
+                        )
                     }
-                )
+                }
+            }
+            //Due date reminders
+            items(airedReminders) { reminder ->
+                AnimatedVisibility(
+                    visible = showDueDateReminders,
+                    enter = slideInVertically(
+                        animationSpec = tween(750)
+                    ) + fadeIn(
+                        animationSpec = tween(750)
+                    ),
+                    exit = slideOutVertically(
+                        animationSpec = tween(750)
+                    ) + fadeOut(
+                        animationSpec = tween(750)
+                    )
+                ) {
+                    ReminderComponent(
+                        message = reminder.message,
+                        deadline = reminder.reminder_time,
+                        imagePath = reminder.imagePath,
+                        onClick = {
+                            navHostController.navigate(Screen.ReminderEdit.route + "?id=${reminder.id}")
+                        },
+                        onDelete = {
+                            showDeleteAlert = reminder
+                        }
+                    )
+                }
+            }
+
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .clickable {
+                            showMoreReminders = !showMoreReminders
+                        },
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Show more",
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                    if (showMoreReminders) {
+                        Icon(
+                            imageVector = Icons.Default.KeyboardArrowDown,
+                            contentDescription = "show more"
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Default.KeyboardArrowUp,
+                            contentDescription = "show less"
+                        )
+                    }
+                }
+            }
+            //Rest of the reminders
+            items(notAiredReminders) { reminder ->
+                AnimatedVisibility(
+                    visible = showMoreReminders,
+                    enter = slideInVertically(
+                        animationSpec = tween(750)
+                    ) + fadeIn(
+                        animationSpec = tween(750)
+                    ),
+                    exit = slideOutVertically(
+                        animationSpec = tween(750)
+                    ) + fadeOut(
+                        animationSpec = tween(750)
+                    )
+                ) {
+                    ReminderComponent(
+                        message = reminder.message,
+                        deadline = reminder.reminder_time,
+                        imagePath = reminder.imagePath,
+                        onClick = {
+                            navHostController.navigate(Screen.ReminderEdit.route + "?id=${reminder.id}")
+                        },
+                        onDelete = {
+                            showDeleteAlert = reminder
+                        }
+                    )
+                }
             }
         }
     }
