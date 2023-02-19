@@ -1,6 +1,10 @@
 package com.example.mobilecomputinghomework.feature_reminder.presentation.reminder_edit
 
+import android.Manifest
+import android.content.Context.*
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.text.format.DateFormat
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -16,15 +20,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.example.mobilecomputinghomework.feature_notification.data.AndroidReminderScheduler
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import kotlin.time.Duration.Companion.hours
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReminderEditScreen(
     navHostController: NavHostController,
@@ -39,14 +43,35 @@ fun ReminderEditScreen(
         mutableStateOf(false)
     }
     val context = LocalContext.current
+    val scheduler = AndroidReminderScheduler(context)
 
+    var hasNotificationPermission by remember {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            mutableStateOf(
+                ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+            )
+        } else mutableStateOf(true)
+    }
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            hasNotificationPermission = isGranted
+        }
+    )
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    }
                     if (viewModel.currentReminder.message.isNotEmpty()) {
                         viewModel.onSave()
-                        if (viewModel.currentReminder.id == null) {
+                        scheduler.schedule(viewModel.currentReminder)
+                        /*if (viewModel.currentReminder.id == null) {
                             val startDate =
                                 viewModel.currentReminder.reminder_time?.toEpochMilliseconds()
                             val endDate = viewModel.currentReminder.reminder_time?.plus(1.hours)
@@ -58,7 +83,7 @@ fun ReminderEditScreen(
                             mIntent.putExtra("endTime", endDate)
                             mIntent.putExtra("title", viewModel.currentReminder.message)
                             context.startActivity(mIntent)
-                        }
+                        }*/
                         navHostController.navigateUp()
                     }else{
                         messageIsEmptyError = true
@@ -249,3 +274,4 @@ fun ReminderEditScreen(
         }
     }
 }
+
