@@ -50,7 +50,7 @@ class ReminderEditViewModel @Inject constructor(
             _currentReminder.update {
                 it.copy(id = id)
             }
-            if (currentReminder.value.setNotification){
+            if (currentReminder.value.addNotification){
                 scheduler.schedule(currentReminder.value)
             }
             if (currentReminder.value.addCalendarEvent) {
@@ -108,7 +108,7 @@ class ReminderEditViewModel @Inject constructor(
 
     fun onSetNotificationChange(checked: Boolean){
         _currentReminder.update {
-            it.copy(setNotification = checked)
+            it.copy(addNotification = checked)
         }
     }
 }

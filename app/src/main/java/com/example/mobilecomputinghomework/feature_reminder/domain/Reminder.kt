@@ -14,6 +14,6 @@ data class Reminder(
     val creator_id: Long = 1L,
     val reminder_seen: Boolean = false,
     val addCalendarEvent: Boolean = false,
-    val setNotification: Boolean = false,
+    val addNotification: Boolean = true,
     val imagePath: Uri? = null
 )

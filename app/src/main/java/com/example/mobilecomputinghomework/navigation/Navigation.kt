@@ -1,5 +1,6 @@
 package com.example.mobilecomputinghomework.navigation
 
+import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -7,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.example.mobilecomputinghomework.feature_authentication.presentation.login.LoginScreen
 import com.example.mobilecomputinghomework.feature_authentication.presentation.registration.presentation.RegistrationScreen
 import com.example.mobilecomputinghomework.feature_profile.presentation.ProfileScreen
@@ -28,6 +30,12 @@ fun Navigation(
         }
         composable(
             route = Screen.ReminderEdit.route + "?id={id}",
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "https://reminders_detail/{id}"
+                    action = Intent.ACTION_VIEW
+                }
+            ),
             arguments = listOf(
                 navArgument(
                     name = "id"

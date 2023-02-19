@@ -5,8 +5,8 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.core.app.NotificationCompat
-import com.example.mobilecomputinghomework.MainActivity
 import com.example.mobilecomputinghomework.R
 import com.example.mobilecomputinghomework.feature_reminder.domain.ReminderRepository
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,9 +22,10 @@ class ReminderAlarmReceiver: BroadcastReceiver() {
         val message = intent?.getStringExtra("reminder_message") ?: return
         val id = intent.getLongExtra("reminder_id", -1)
 
-        val newIntent = Intent(context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
+        val newIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://reminders_detail/$id")
+        )
         val pendingIntent = PendingIntent.getActivity(context, 0, newIntent, PendingIntent.FLAG_IMMUTABLE)
 
         val notification = NotificationCompat.Builder(context!!, "reminders")

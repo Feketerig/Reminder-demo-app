@@ -228,7 +228,7 @@ fun ReminderEditScreen(
                 Text(text = "Add notification")
                 Spacer(modifier = Modifier.width(8.dp))
                 Switch(
-                    checked = currentReminder.setNotification,
+                    checked = currentReminder.addNotification,
                     onCheckedChange = viewModel::onSetNotificationChange
                 )
             }
