@@ -125,7 +125,10 @@ fun ReminderEditScreen(
                 modifier = Modifier.fillMaxWidth(),
                 textStyle = MaterialTheme.typography.headlineMedium,
                 placeholder = {
-                    Text(text = "Message")
+                    Text(
+                        text = "Message",
+                        fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                    )
                 }
             )
             if (messageIsEmptyError){
