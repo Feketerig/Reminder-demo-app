@@ -14,5 +14,7 @@ data class ReminderEntity(
     val creation_time: Long,
     val creator_id: Long,
     val reminder_seen: Boolean,
+    val addCalendarEvent: Boolean,
+    val addNotification: Boolean,
     val imagePath: String?
 )

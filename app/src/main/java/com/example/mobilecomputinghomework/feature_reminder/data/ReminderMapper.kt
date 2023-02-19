@@ -13,6 +13,8 @@ fun ReminderEntity.toDomain(): Reminder = Reminder(
     creation_time = Instant.fromEpochSeconds(creation_time),
     creator_id = creator_id,
     reminder_seen = reminder_seen,
+    addCalendarEvent = addCalendarEvent,
+    addNotification = addNotification,
     imagePath = imagePath?.toUri()
 )
 
@@ -25,5 +27,7 @@ fun Reminder.toEntity(): ReminderEntity = ReminderEntity(
     creation_time = creation_time.epochSeconds,
     creator_id = creator_id,
     reminder_seen = reminder_seen,
+    addCalendarEvent = addCalendarEvent,
+    addNotification = addNotification,
     imagePath = imagePath?.toString()
 )
