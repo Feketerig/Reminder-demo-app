@@ -78,20 +78,7 @@ fun ReminderEditScreen(
                         launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
                     }
                     if (currentReminder.message.isNotEmpty()) {
-                        viewModel.onSave()
-                        /*if (viewModel.currentReminder.id == null) {
-                            val startDate =
-                                viewModel.currentReminder.reminder_time?.toEpochMilliseconds()
-                            val endDate = viewModel.currentReminder.reminder_time?.plus(1.hours)
-                                ?.toEpochMilliseconds()
-                            val mIntent = Intent(Intent.ACTION_EDIT)
-                            mIntent.type = "vnd.android.cursor.item/event"
-                            mIntent.putExtra("beginTime", startDate)
-                            mIntent.putExtra("time", true)
-                            mIntent.putExtra("endTime", endDate)
-                            mIntent.putExtra("title", viewModel.currentReminder.message)
-                            context.startActivity(mIntent)
-                        }*/
+                        viewModel.onSave(context)
                         navHostController.navigateUp()
                     }else{
                         messageIsEmptyError = true
@@ -225,6 +212,24 @@ fun ReminderEditScreen(
                         )
                     }
                 }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(text = "Add event to calendar")
+                Spacer(modifier = Modifier.width(8.dp))
+                Switch(
+                    checked = currentReminder.addCalendarEvent,
+                    onCheckedChange = viewModel::onAddCalendarEventChange
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(text = "Add notification")
+                Spacer(modifier = Modifier.width(8.dp))
+                Switch(
+                    checked = currentReminder.setNotification,
+                    onCheckedChange = viewModel::onSetNotificationChange
+                )
             }
         }
     }

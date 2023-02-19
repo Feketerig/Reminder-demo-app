@@ -1,5 +1,7 @@
 package com.example.mobilecomputinghomework.feature_reminder.presentation.reminder_edit
 
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -16,6 +18,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.*
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.hours
 
 @HiltViewModel
 class ReminderEditViewModel @Inject constructor(
@@ -37,7 +40,7 @@ class ReminderEditViewModel @Inject constructor(
         }
     }
 
-    fun onSave() {
+    fun onSave(context: Context) {
         viewModelScope.launch {
             _currentReminder.update {
                 it.copy(creation_time = Clock.System.now())
@@ -46,7 +49,20 @@ class ReminderEditViewModel @Inject constructor(
             _currentReminder.update {
                 it.copy(id = id)
             }
-            scheduler.schedule(currentReminder.value)
+            if (currentReminder.value.setNotification){
+                scheduler.schedule(currentReminder.value)
+            }
+            if (currentReminder.value.addCalendarEvent) {
+                val startDate = currentReminder.value.reminder_time?.toEpochMilliseconds()
+                val endDate = currentReminder.value.reminder_time?.plus(1.hours)?.toEpochMilliseconds()
+                val mIntent = Intent(Intent.ACTION_EDIT)
+                mIntent.type = "vnd.android.cursor.item/event"
+                mIntent.putExtra("beginTime", startDate)
+                mIntent.putExtra("time", true)
+                mIntent.putExtra("endTime", endDate)
+                mIntent.putExtra("title", currentReminder.value.message)
+                context.startActivity(mIntent)
+            }
         }
     }
 
@@ -83,7 +99,15 @@ class ReminderEditViewModel @Inject constructor(
         }
     }
 
-    fun onAddCalendarEventChange(){
+    fun onAddCalendarEventChange(checked: Boolean){
+        _currentReminder.update {
+            it.copy(addCalendarEvent = checked)
+        }
+    }
 
+    fun onSetNotificationChange(checked: Boolean){
+        _currentReminder.update {
+            it.copy(setNotification = checked)
+        }
     }
 }

@@ -13,5 +13,7 @@ data class Reminder(
     val creation_time: Instant = Clock.System.now(),
     val creator_id: Long = 1L,
     val reminder_seen: Boolean = false,
+    val addCalendarEvent: Boolean = false,
+    val setNotification: Boolean = false,
     val imagePath: Uri? = null
 )
