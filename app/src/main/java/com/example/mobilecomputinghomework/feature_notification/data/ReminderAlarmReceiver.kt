@@ -8,15 +8,10 @@ import android.content.Intent
 import android.net.Uri
 import androidx.core.app.NotificationCompat
 import com.example.mobilecomputinghomework.R
-import com.example.mobilecomputinghomework.feature_reminder.domain.ReminderRepository
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class ReminderAlarmReceiver: BroadcastReceiver() {
-
-    @Inject
-    lateinit var reminderRepository: ReminderRepository
 
     override fun onReceive(context: Context?, intent: Intent?) {
         val message = intent?.getStringExtra("reminder_message") ?: return
@@ -31,7 +26,7 @@ class ReminderAlarmReceiver: BroadcastReceiver() {
         val notification = NotificationCompat.Builder(context!!, "reminders")
             .setSmallIcon(R.drawable.baseline_alarm_24)
             .setContentTitle("Reminder")
-            .setContentText("$message $id")
+            .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)

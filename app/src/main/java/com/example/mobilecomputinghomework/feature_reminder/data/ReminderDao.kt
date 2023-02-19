@@ -21,4 +21,6 @@ interface ReminderDao {
     @Query("delete from reminders")
     suspend fun clearReminders()
 
+    @Query("select * from reminders where addNotification = true")
+    suspend fun getRemindersWithNotification(): List<ReminderEntity>
 }

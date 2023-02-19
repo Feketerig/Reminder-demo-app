@@ -43,6 +43,9 @@ fun ReminderEditScreen(
     var messageIsEmptyError by remember {
         mutableStateOf(false)
     }
+    var timeIsNullError by remember {
+        mutableStateOf(false)
+    }
     val context = LocalContext.current
 
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
@@ -77,11 +80,13 @@ fun ReminderEditScreen(
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
                     }
-                    if (currentReminder.message.isNotEmpty()) {
+                    if (currentReminder.message.isEmpty()) {
+                        messageIsEmptyError = true
+                    } else if(currentReminder.addNotification && currentReminder.reminder_time == null) {
+                        timeIsNullError = true
+                    } else{
                         viewModel.onSave(context)
                         navHostController.navigateUp()
-                    }else{
-                        messageIsEmptyError = true
                     }
             } ) {
                 Icon(
@@ -149,7 +154,10 @@ fun ReminderEditScreen(
             }
             Spacer(modifier = Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Button(onClick = { showDatePicker = true }) {
+                Button(onClick = {
+                    showDatePicker = true
+                    timeIsNullError = false
+                }) {
                     Text(text = "Pick date and time")
                 }
                 if (currentReminder.reminder_time != null) {
@@ -161,6 +169,13 @@ fun ReminderEditScreen(
                         )
                     }
                 }
+            }
+            if (timeIsNullError){
+                Text(
+                    text = "Time can not be empty when there is a notification",
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.align(Alignment.End)
+                )
             }
 
             if (showDatePicker) {

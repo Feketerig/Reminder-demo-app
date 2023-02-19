@@ -25,4 +25,8 @@ class ReminderRepositoryImpl(
     override suspend fun clearReminders() {
         reminderDao.clearReminders()
     }
+
+    override suspend fun getRemindersWithNotification(): List<ReminderEntity> {
+        return reminderDao.getRemindersWithNotification()
+    }
 }
