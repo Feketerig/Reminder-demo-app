@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mobilecomputinghomework.feature_notification.domain.ReminderScheduler
 import com.example.mobilecomputinghomework.feature_reminder.data.toDomain
 import com.example.mobilecomputinghomework.feature_reminder.data.toEntity
 import com.example.mobilecomputinghomework.feature_reminder.domain.Reminder
@@ -18,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ReminderEditViewModel @Inject constructor(
     private val reminderRepository: ReminderRepository,
+    private val scheduler: ReminderScheduler,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
@@ -36,7 +38,9 @@ class ReminderEditViewModel @Inject constructor(
     fun onSave() {
         viewModelScope.launch {
             currentReminder = currentReminder.copy(creation_time = Clock.System.now())
-            reminderRepository.insertReminder(currentReminder.toEntity())
+            val id = reminderRepository.insertReminder(currentReminder.toEntity())
+            currentReminder = currentReminder.copy(id = id)
+            scheduler.schedule(currentReminder)
         }
     }
 

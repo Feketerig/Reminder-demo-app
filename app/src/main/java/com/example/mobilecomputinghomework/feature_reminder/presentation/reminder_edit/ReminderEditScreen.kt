@@ -24,7 +24,6 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.mobilecomputinghomework.feature_notification.data.AndroidReminderScheduler
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -43,7 +42,6 @@ fun ReminderEditScreen(
         mutableStateOf(false)
     }
     val context = LocalContext.current
-    val scheduler = AndroidReminderScheduler(context)
 
     var hasNotificationPermission by remember {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -70,7 +68,6 @@ fun ReminderEditScreen(
                     }
                     if (viewModel.currentReminder.message.isNotEmpty()) {
                         viewModel.onSave()
-                        scheduler.schedule(viewModel.currentReminder)
                         /*if (viewModel.currentReminder.id == null) {
                             val startDate =
                                 viewModel.currentReminder.reminder_time?.toEpochMilliseconds()

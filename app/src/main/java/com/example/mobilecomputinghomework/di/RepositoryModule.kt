@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 
 @Module
@@ -14,6 +15,7 @@ import dagger.hilt.components.SingletonComponent
 object RepositoryModule {
 
     @Provides
+    @Singleton
     fun provideReminderRepository(reminderDao: ReminderDao): ReminderRepository =
         ReminderRepositoryImpl(reminderDao)
 }

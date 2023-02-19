@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface ReminderDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertReminder(reminderEntity: ReminderEntity)
+    suspend fun insertReminder(reminderEntity: ReminderEntity): Long
 
     @Query("select * from reminders where id = :id")
     suspend fun getReminderById(id: Long): ReminderEntity

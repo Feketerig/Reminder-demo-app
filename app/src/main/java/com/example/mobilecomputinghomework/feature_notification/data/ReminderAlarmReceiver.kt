@@ -19,18 +19,18 @@ class ReminderAlarmReceiver: BroadcastReceiver() {
     lateinit var reminderRepository: ReminderRepository
 
     override fun onReceive(context: Context?, intent: Intent?) {
+        val message = intent?.getStringExtra("reminder_message") ?: return
+        val id = intent.getLongExtra("reminder_id", -1)
+
         val newIntent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent = PendingIntent.getActivity(context, 0, newIntent, PendingIntent.FLAG_IMMUTABLE)
 
-        val message = intent?.getStringExtra("reminder_message") ?: return
-        val id = intent.getStringExtra("reminder_id") ?: return
-
         val notification = NotificationCompat.Builder(context!!, "reminders")
             .setSmallIcon(R.drawable.baseline_alarm_24)
             .setContentTitle("Reminder")
-            .setContentText(message)
+            .setContentText("$message $id")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
