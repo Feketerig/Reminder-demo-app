@@ -129,7 +129,7 @@ fun RemindersListScreen(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "Due date",
+                        text = "Today",
                         style = MaterialTheme.typography.headlineMedium
                     )
                     Spacer(modifier = Modifier.width(5.dp))

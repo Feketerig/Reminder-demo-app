@@ -50,7 +50,12 @@ class ReminderEditViewModel @Inject constructor(
                 it.copy(id = id)
             }
             if (currentReminder.value.addNotification){
-                scheduler.schedule(currentReminder.value)
+                scheduler.schedule(
+                    context = context,
+                    reminderId = currentReminder.value.id!!,
+                    reminderMessage = currentReminder.value.message,
+                    reminderTime = currentReminder.value.reminder_time!!.epochSeconds
+                )
             }
             if (currentReminder.value.addCalendarEvent) {
                 val startDate = currentReminder.value.reminder_time?.toEpochMilliseconds()

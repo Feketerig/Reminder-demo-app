@@ -1,7 +1,7 @@
 package com.example.mobilecomputinghomework.feature_notification.domain
 
-import com.example.mobilecomputinghomework.feature_reminder.domain.Reminder
+import android.content.Context
 
 interface ReminderScheduler {
-    fun schedule(item: Reminder)
+    fun schedule(context: Context, reminderId: Long, reminderMessage: String, reminderTime: Long)
 }

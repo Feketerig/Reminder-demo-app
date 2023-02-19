@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.example.mobilecomputinghomework.feature_notification.domain.ReminderScheduler
-import com.example.mobilecomputinghomework.feature_reminder.data.toDomain
 import com.example.mobilecomputinghomework.feature_reminder.domain.ReminderRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -24,16 +23,21 @@ class BootCompleteReceiver: BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == Intent.ACTION_BOOT_COMPLETED){
-            setUpReminderNotifications()
+            setUpReminderNotifications(context!!)
         }
     }
 
-    private fun setUpReminderNotifications(){
+    private fun setUpReminderNotifications(context: Context){
         CoroutineScope(Dispatchers.IO).launch {
             val reminders = reminderRepository.getRemindersWithNotification()
             reminders.forEach { reminder ->
                 if (reminder.reminder_time!! > Clock.System.now().epochSeconds){
-                    scheduler.schedule(reminder.toDomain())
+                    scheduler.schedule(
+                        context = context,
+                        reminderId = reminder.id!!,
+                        reminderMessage = reminder.message,
+                        reminderTime = reminder.reminder_time
+                    )
                 }
             }
         }

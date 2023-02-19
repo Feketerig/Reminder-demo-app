@@ -40,6 +40,7 @@
             </intent-filter>
         </activity>
         <receiver android:name=".feature_notification.data.ReminderAlarmReceiver"/>
+        <receiver android:name=".feature_notification.data.AndroidReminderScheduler"/>
         <receiver
             android:name=".feature_notification.data.BootCompleteReceiver"
             android:exported="false">
