@@ -123,6 +123,7 @@ fun ReminderEditScreen(
                 },
                 isError = messageIsEmptyError,
                 modifier = Modifier.fillMaxWidth(),
+                textStyle = MaterialTheme.typography.headlineMedium,
                 placeholder = {
                     Text(text = "Message")
                 }

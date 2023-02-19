@@ -32,9 +32,10 @@ class ReminderEditViewModel @Inject constructor(
 
     init {
         savedStateHandle.get<Int>("id")?.let { id ->
+            println(id)
             if (id != -1) {
                 viewModelScope.launch {
-                    _currentReminder = MutableStateFlow(reminderRepository.getReminderById(id.toLong()).toDomain())
+                    _currentReminder.value = reminderRepository.getReminderById(id.toLong()).toDomain()
                 }
             }
         }
