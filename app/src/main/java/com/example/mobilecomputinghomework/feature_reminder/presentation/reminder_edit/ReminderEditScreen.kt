@@ -33,6 +33,8 @@ fun ReminderEditScreen(
     navHostController: NavHostController,
     viewModel: ReminderEditViewModel = hiltViewModel()
 ) {
+    val currentReminder by viewModel.currentReminder.collectAsState()
+
     var showDatePicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
     var date by remember {
@@ -42,6 +44,15 @@ fun ReminderEditScreen(
         mutableStateOf(false)
     }
     val context = LocalContext.current
+
+    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri ->
+            val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            context.contentResolver.takePersistableUriPermission(uri!!, flag)
+            viewModel.onUriChange(uri)
+        }
+    )
 
     var hasNotificationPermission by remember {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -66,7 +77,7 @@ fun ReminderEditScreen(
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
                     }
-                    if (viewModel.currentReminder.message.isNotEmpty()) {
+                    if (currentReminder.message.isNotEmpty()) {
                         viewModel.onSave()
                         /*if (viewModel.currentReminder.id == null) {
                             val startDate =
@@ -96,7 +107,7 @@ fun ReminderEditScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    if (viewModel.currentReminder.id != null){
+                    if (currentReminder.id != null){
                         Text(text = "Edit reminder")
                     }else{
                         Text(text = "Create reminder")
@@ -118,10 +129,10 @@ fun ReminderEditScreen(
             Text(text = "Reminder message: ")
             Spacer(modifier = Modifier.height(8.dp))
             TextField(
-                value = viewModel.currentReminder.message,
-                onValueChange = {
+                value = currentReminder.message,
+                onValueChange = { message ->
                     messageIsEmptyError = false
-                    viewModel.currentReminder = viewModel.currentReminder.copy(message = it)
+                    viewModel.onMessageTextChange(message)
                 },
                 isError = messageIsEmptyError,
                 modifier = Modifier.fillMaxWidth(),
@@ -139,7 +150,7 @@ fun ReminderEditScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Row {
                 Text(text = "Selected alert time: ")
-                viewModel.currentReminder.reminder_time?.let {time ->
+                currentReminder.reminder_time?.let {time ->
                     val localDateTime = time.toLocalDateTime(TimeZone.currentSystemDefault())
                     val formattedLocalDateTime = localDateTime.toString().replace("T", " ")
                     Text(text = formattedLocalDateTime)
@@ -150,11 +161,8 @@ fun ReminderEditScreen(
                 Button(onClick = { showDatePicker = true }) {
                     Text(text = "Pick date and time")
                 }
-                if (viewModel.currentReminder.reminder_time != null) {
-                    IconButton(onClick = {
-                        viewModel.currentReminder =
-                            viewModel.currentReminder.copy(reminder_time = null)
-                    }) {
+                if (currentReminder.reminder_time != null) {
+                    IconButton(onClick = viewModel::onReminderTimeDelete) {
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = "Delete time",
@@ -165,100 +173,51 @@ fun ReminderEditScreen(
             }
 
             if (showDatePicker) {
-                val datePickerState = rememberDatePickerState()
-                val confirmEnabled by remember{ derivedStateOf { datePickerState.selectedDateMillis != null }}
                 DatePickerDialog(
-                    onDismissRequest = {
+                    onClick = { selectedDateInMillis ->
                         showDatePicker = false
+                        date = selectedDateInMillis
+                        showTimePicker = true
                     },
-                    confirmButton = {
-                        TextButton(
-                            onClick = {
-                                showDatePicker = false
-                                date = datePickerState.selectedDateMillis!!
-                                showTimePicker = true
-                            },
-                            enabled = confirmEnabled
-                        ) {
-                            Text("OK")
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(
-                            onClick = {
-                                showDatePicker = false
-                            }
-                        ) {
-                            Text("Cancel")
-                        }
-                    }
-                ) {
-                    DatePicker(state = datePickerState)
-                }
-            }
-            if (showTimePicker) {
-                val is24HourFormat by rememberUpdatedState(DateFormat.is24HourFormat(context))
-                val state = rememberTimePickerState(is24Hour = is24HourFormat)
-                AlertDialog(
-                    onDismissRequest = {
-                        showTimePicker = false
-                    },
-                    title = {
-                        Text(text = "Choose time!")
-                    },
-                    text = {
-                        TimePicker(state = state)
-                    },
-                    confirmButton = {
-                        Button(
-                            onClick = {
-                                viewModel.setReminderTime(date, state.hour, state.minute)
-                                showTimePicker = false
-                            }) {
-                            Text("OK")
-                        }
-                    },
-                    dismissButton = {
-                        Button(
-                            onClick = {
-                                showTimePicker = false
-                            }) {
-                            Text("Cancel")
-                        }
+                    onDismiss = {
+                        showDatePicker = false
                     }
                 )
             }
-            val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
-                contract = ActivityResultContracts.PickVisualMedia(),
-                onResult = { uri ->
-                    val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    context.contentResolver.takePersistableUriPermission(uri!!, flag)
-                    viewModel.currentReminder = viewModel.currentReminder.copy(imagePath = uri)
-                }
-            )
+            if (showTimePicker) {
+                TimePickerDialog(
+                    onClick = { hour, minute ->
+                        viewModel.setReminderTime(date, hour, minute)
+                        showTimePicker = false
+                    },
+                    onDismiss = {
+                        showTimePicker = false
+                    }
+                )
+            }
+
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = {
                 singlePhotoPickerLauncher.launch(
                     PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                 )
             }) {
-                if (viewModel.currentReminder.imagePath == null) {
+                if (currentReminder.imagePath == null) {
                     Text(text = "Pick a photo")
                 }else{
                     Text(text = "Change photo")
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))
-            if (viewModel.currentReminder.imagePath != null){
+            if (currentReminder.imagePath != null){
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     AsyncImage(
-                        model = viewModel.currentReminder.imagePath,
+                        model = currentReminder.imagePath,
                         contentDescription = "Reminder picture",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.size(100.dp),
                     )
-                    IconButton(onClick = { viewModel.currentReminder =
-                        viewModel.currentReminder.copy(imagePath = null) }) {
+                    IconButton(onClick = viewModel::onUriDelete) {
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = "Delete image",
@@ -267,8 +226,72 @@ fun ReminderEditScreen(
                     }
                 }
             }
-
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DatePickerDialog(
+    onClick: (Long) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val datePickerState = rememberDatePickerState()
+    val confirmEnabled by remember{ derivedStateOf { datePickerState.selectedDateMillis != null }}
+    DatePickerDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(
+                onClick = { onClick(datePickerState.selectedDateMillis!!) },
+                enabled = confirmEnabled
+            ) {
+                Text("OK")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismiss
+            ) {
+                Text("Cancel")
+            }
+        }
+    ) {
+        DatePicker(state = datePickerState)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TimePickerDialog(
+    onClick: (Int, Int) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val context = LocalContext.current
+    val is24HourFormat by rememberUpdatedState(DateFormat.is24HourFormat(context))
+    val state = rememberTimePickerState(is24Hour = is24HourFormat)
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(text = "Choose time!")
+        },
+        text = {
+            TimePicker(state = state)
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    onClick(state.hour, state.minute)
+                }
+            ) {
+                Text("OK")
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = onDismiss
+            ) {
+                Text("Cancel")
+            }
+        }
+    )
+}
