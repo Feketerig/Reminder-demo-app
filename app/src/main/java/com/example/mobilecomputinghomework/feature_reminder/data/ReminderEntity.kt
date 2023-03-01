@@ -8,8 +8,9 @@ data class ReminderEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long?,
     val message: String,
-    val location_x: Double?,
-    val location_y: Double?,
+    val lat: Double? = null,
+    val lon: Double? = null,
+    val radius: Int? = null,
     val reminder_time: Long?,
     val creation_time: Long,
     val creator_id: Long,
