@@ -11,6 +11,7 @@ import com.example.mobilecomputinghomework.feature_reminder.data.toDomain
 import com.example.mobilecomputinghomework.feature_reminder.data.toEntity
 import com.example.mobilecomputinghomework.feature_reminder.domain.Reminder
 import com.example.mobilecomputinghomework.feature_reminder.domain.ReminderRepository
+import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -113,6 +114,16 @@ class ReminderEditViewModel @Inject constructor(
     fun onSetNotificationChange(checked: Boolean){
         _currentReminder.update {
             it.copy(addNotification = checked)
+        }
+    }
+
+    fun setGpsPosition(markerPosition: LatLng, radius: Int) {
+        _currentReminder.update {
+            it.copy(
+                lat = markerPosition.latitude,
+                lon = markerPosition.longitude,
+                radius = radius
+            )
         }
     }
 }
