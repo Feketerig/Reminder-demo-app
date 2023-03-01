@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "077133a0e0308264d4c1e3a890c1b106",
+    "identityHash": "218eb9db8db87bf32375eda62445f6d7",
     "entities": [
       {
         "tableName": "reminders",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `message` TEXT NOT NULL, `location_x` REAL, `location_y` REAL, `reminder_time` INTEGER, `creation_time` INTEGER NOT NULL, `creator_id` INTEGER NOT NULL, `reminder_seen` INTEGER NOT NULL, `addCalendarEvent` INTEGER NOT NULL, `addNotification` INTEGER NOT NULL, `imagePath` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `message` TEXT NOT NULL, `lat` REAL, `lon` REAL, `radius` INTEGER, `reminder_time` INTEGER, `creation_time` INTEGER NOT NULL, `creator_id` INTEGER NOT NULL, `reminder_seen` INTEGER NOT NULL, `addCalendarEvent` INTEGER NOT NULL, `addNotification` INTEGER NOT NULL, `imagePath` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -21,15 +21,21 @@
             "notNull": true
           },
           {
-            "fieldPath": "location_x",
-            "columnName": "location_x",
+            "fieldPath": "lat",
+            "columnName": "lat",
             "affinity": "REAL",
             "notNull": false
           },
           {
-            "fieldPath": "location_y",
-            "columnName": "location_y",
+            "fieldPath": "lon",
+            "columnName": "lon",
             "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "radius",
+            "columnName": "radius",
+            "affinity": "INTEGER",
             "notNull": false
           },
           {
@@ -88,7 +94,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '077133a0e0308264d4c1e3a890c1b106')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '218eb9db8db87bf32375eda62445f6d7')"
     ]
   }
 }

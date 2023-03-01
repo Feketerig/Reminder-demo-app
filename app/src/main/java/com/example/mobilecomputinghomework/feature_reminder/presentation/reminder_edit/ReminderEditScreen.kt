@@ -148,38 +148,49 @@ fun ReminderEditScreen(
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
-            Row {
-                Text(text = "Selected alert time: ")
-                currentReminder.reminder_time?.let {time ->
-                    val localDateTime = time.toLocalDateTime(TimeZone.currentSystemDefault())
-                    val formattedLocalDateTime = localDateTime.toString().replace("T", " ")
-                    Text(text = formattedLocalDateTime)
-                }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(text = "Add notification")
+                Spacer(modifier = Modifier.width(8.dp))
+                Switch(
+                    checked = currentReminder.addNotification,
+                    onCheckedChange = viewModel::onSetNotificationChange
+                )
             }
             Spacer(modifier = Modifier.height(8.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Button(onClick = {
-                    showDatePicker = true
-                    timeIsNullError = false
-                }) {
-                    Text(text = "Pick date and time")
-                }
-                if (currentReminder.reminder_time != null) {
-                    IconButton(onClick = viewModel::onReminderTimeDelete) {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "Delete time",
-                            modifier = Modifier.size(50.dp)
-                        )
+            if (currentReminder.addNotification) {
+                Row {
+                    Text(text = "Selected alert time: ")
+                    currentReminder.reminder_time?.let { time ->
+                        val localDateTime = time.toLocalDateTime(TimeZone.currentSystemDefault())
+                        val formattedLocalDateTime = localDateTime.toString().replace("T", " ")
+                        Text(text = formattedLocalDateTime)
                     }
                 }
-            }
-            if (timeIsNullError){
-                Text(
-                    text = "Time can not be empty when there is a notification",
-                    color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.align(Alignment.End)
-                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Button(onClick = {
+                        showDatePicker = true
+                        timeIsNullError = false
+                    }) {
+                        Text(text = "Pick date and time")
+                    }
+                    if (currentReminder.reminder_time != null) {
+                        IconButton(onClick = viewModel::onReminderTimeDelete) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Delete time",
+                                modifier = Modifier.size(50.dp)
+                            )
+                        }
+                    }
+                }
+                if (timeIsNullError) {
+                    Text(
+                        text = "Time can not be empty when there is a notification",
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.align(Alignment.End)
+                    )
+                }
             }
 
             if (showDatePicker) {
@@ -245,18 +256,16 @@ fun ReminderEditScreen(
                     onCheckedChange = viewModel::onAddCalendarEventChange
                 )
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "Add notification")
-                Spacer(modifier = Modifier.width(8.dp))
-                Switch(
-                    checked = currentReminder.addNotification,
-                    onCheckedChange = viewModel::onSetNotificationChange
-                )
-            }
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = { showGPSChooser = true }) {
                 Text(text = "Choose GPS Position")
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            currentReminder.lat?.let {
+                Text(text = "Selected location: \n" +
+                        "Latitude: ${currentReminder.lat} \n" +
+                        "Longitude:  ${currentReminder.lon} \n" +
+                        "Radius: ${currentReminder.radius} m")
             }
             if (showGPSChooser){
                 GPSPositionChooser(
