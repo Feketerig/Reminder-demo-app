@@ -4,6 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.serialization'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -43,6 +44,7 @@ android {
         jvmTarget = '1.8'
     }
     buildFeatures {
+        buildConfig true
         compose true
     }
     composeOptions {
@@ -121,6 +123,12 @@ dependencies {
     //Coil
     implementation "io.coil-kt:coil-compose:2.2.2"
 
+    //Google maps
+    implementation 'com.google.maps.android:maps-compose:2.11.0'
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+//    implementation 'com.google.maps.android:maps-compose-utils:2.10.0'
+//    implementation 'com.google.maps.android:maps-compose-widgets:2.10.0'
+
     // Local unit tests
     testImplementation "androidx.test:core:1.5.0"
     testImplementation "junit:junit:4.13.2"
@@ -149,4 +157,10 @@ dependencies {
 }
 kapt {
     correctErrorTypes true
+}
+secrets {
+    // To add your Maps API key to this project:
+    // 1. Add this line to your local.properties file, where YOUR_API_KEY is your API key:
+    //        MAPS_API_KEY=YOUR_API_KEY
+    defaultPropertiesFileName 'local.properties'
 }
