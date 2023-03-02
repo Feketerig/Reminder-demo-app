@@ -360,6 +360,7 @@ fun GPSPositionChooser(
         mutableStateOf<LatLng?>(null)
     }
     val cameraPositionState = rememberCameraPositionState()
+    val uiSettings by remember { mutableStateOf(MapUiSettings(mapToolbarEnabled = false)) }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
@@ -373,6 +374,7 @@ fun GPSPositionChooser(
                 GoogleMap(
                     modifier = Modifier.height(400.dp),
                     cameraPositionState = cameraPositionState,
+                    uiSettings = uiSettings,
                     onMapClick = {
                         markerPosition = it
                     }
@@ -381,6 +383,7 @@ fun GPSPositionChooser(
                         Marker(
                             state = MarkerState(position = it),
                             title = "Chosen Location",
+
                         )
                         Circle(
                             center = it,
