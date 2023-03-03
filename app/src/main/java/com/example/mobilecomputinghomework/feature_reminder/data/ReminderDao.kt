@@ -23,4 +23,7 @@ interface ReminderDao {
 
     @Query("select * from reminders where addNotification = true")
     suspend fun getRemindersWithNotification(): List<ReminderEntity>
+
+    @Query("select * from reminders where lat is not null")
+    suspend fun getRemindersWithLocation(): List<ReminderEntity>
 }

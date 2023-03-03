@@ -16,4 +16,6 @@ interface ReminderRepository {
     suspend fun clearReminders()
 
     suspend fun getRemindersWithNotification(): List<ReminderEntity>
+
+    suspend fun getRemindersWithLocation(): List<ReminderEntity>
 }
