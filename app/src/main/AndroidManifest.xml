@@ -3,10 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
     <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
 
     <application
         android:name=".ReminderApplication"
@@ -46,6 +49,7 @@
         </activity>
         <receiver android:name=".feature_notification.data.ReminderAlarmReceiver"/>
         <receiver android:name=".feature_notification.data.AndroidReminderScheduler"/>
+        <receiver android:name=".feature_location.data.GeofenceBroadcastReceiver"/>
         <receiver
             android:name=".feature_notification.data.BootCompleteReceiver"
             android:exported="false">
