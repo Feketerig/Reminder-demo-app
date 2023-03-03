@@ -11,6 +11,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import com.example.mobilecomputinghomework.feature_authentication.presentation.login.LoginScreen
 import com.example.mobilecomputinghomework.feature_authentication.presentation.registration.presentation.RegistrationScreen
+import com.example.mobilecomputinghomework.feature_location.presentation.MapScreen
 import com.example.mobilecomputinghomework.feature_profile.presentation.ProfileScreen
 import com.example.mobilecomputinghomework.feature_reminder.presentation.reminder_edit.ReminderEditScreen
 import com.example.mobilecomputinghomework.feature_reminder.presentation.reminder_list.RemindersListScreen
@@ -68,6 +69,9 @@ fun Navigation(
         }
         composable(route = Screen.Profile.route){
             ProfileScreen("Levente Fazekas")
+        }
+        composable(route = Screen.Maps.route){
+            MapScreen()
         }
     }
 

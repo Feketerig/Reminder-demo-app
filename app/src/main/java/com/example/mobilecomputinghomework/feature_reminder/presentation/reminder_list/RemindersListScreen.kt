@@ -76,6 +76,12 @@ fun RemindersListScreen(
                             onDismissRequest = { showMenu = false }
                         ) {
                             DropdownMenuItem(
+                                text = { Text(text = "Map") },
+                                onClick = {
+                                    showMenu = false
+                                    navHostController.navigate(Screen.Maps.route)
+                                })
+                            DropdownMenuItem(
                                 text = { Text(text = "Profile") },
                                 onClick = {
                                     showMenu = false
