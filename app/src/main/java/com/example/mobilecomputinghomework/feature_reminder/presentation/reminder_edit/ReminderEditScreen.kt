@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.mobilecomputinghomework.feature_location.presentation.GPSPositionChooser
+import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -274,6 +275,12 @@ fun ReminderEditScreen(
                     },
                     onDismiss = {
                         showGPSChooser = false
+                    },
+                    initialRadius = currentReminder.radius?.toFloat() ?: 50f,
+                    initialMarker = currentReminder.lat?.let { lat ->
+                        currentReminder.lon?.let { lon ->
+                            LatLng(lat, lon)
+                        }
                     }
                 )
             }

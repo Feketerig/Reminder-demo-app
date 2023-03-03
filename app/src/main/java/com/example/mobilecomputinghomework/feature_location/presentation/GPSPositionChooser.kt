@@ -9,27 +9,41 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 
 @Composable
 fun GPSPositionChooser(
     onClick: (LatLng, Int) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    initialRadius: Float,
+    initialMarker: LatLng?,
 ) {
     var radius by remember {
-        mutableStateOf(50f)
+        mutableStateOf(initialRadius)
     }
     var markerPosition by remember{
-        mutableStateOf<LatLng?>(null)
+        mutableStateOf(initialMarker)
     }
-    val cameraPositionState = rememberCameraPositionState()
+    val cameraPositionState = if (initialMarker != null){
+        rememberCameraPositionState {
+            position = CameraPosition.fromLatLngZoom(initialMarker, 12f)
+        }
+    }else{
+        rememberCameraPositionState()
+    }
     val uiSettings by remember { mutableStateOf(MapUiSettings(mapToolbarEnabled = false)) }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(text = "Choose a location!")
+            Text(
+                text = "Choose a location!",
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
         },
         text = {
             Column(
@@ -48,8 +62,7 @@ fun GPSPositionChooser(
                         Marker(
                             state = MarkerState(position = it),
                             title = "Chosen Location",
-
-                            )
+                        )
                         Circle(
                             center = it,
                             radius = radius.toDouble(),
